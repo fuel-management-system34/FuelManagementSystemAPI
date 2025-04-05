@@ -73,7 +73,7 @@ namespace FuelManagementSystem.Application.Services
                 }
 
                 // Hash the password
-                user.PasswordHash = HashPassword(password);
+               // user.PasswordHash = HashPassword(password);
 
                 // Create the user
                 var createdUser = await _userRepository.AddAsync(user);
@@ -232,13 +232,13 @@ namespace FuelManagementSystem.Application.Services
                 }
 
                 // Verify current password
-                if (!VerifyPassword(currentPassword, user.PasswordHash))
-                {
-                    return false;
-                }
+                //if (!VerifyPassword(currentPassword, user.PasswordHash))
+                //{
+                //    return false;
+                //}
 
                 // Update with new password
-                user.PasswordHash = HashPassword(newPassword);
+               // user.PasswordHash = HashPassword(newPassword);
                 user.UpdatedAt = DateTime.Now;
                 await _userRepository.UpdateAsync(user);
 
@@ -271,7 +271,7 @@ namespace FuelManagementSystem.Application.Services
                 }
 
                 // Update with new password
-                user.PasswordHash = HashPassword(newPassword);
+               // user.PasswordHash = HashPassword(newPassword);
                 user.UpdatedAt = DateTime.Now;
                 await _userRepository.UpdateAsync(user);
 

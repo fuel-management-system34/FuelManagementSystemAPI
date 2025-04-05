@@ -38,7 +38,7 @@ namespace FuelManagementSystem.Infrastructure.Data.Context
                 entity.HasKey(e => e.UserId);
                 entity.Property(e => e.Username).HasMaxLength(50).IsRequired();
                 entity.Property(e => e.Email).HasMaxLength(100).IsRequired();
-                entity.Property(e => e.PasswordHash).HasMaxLength(255).IsRequired();
+                //entity.Property(e => e.PasswordHash).HasMaxLength(255).IsRequired();
                 entity.Property(e => e.FirstName).HasMaxLength(50);
                 entity.Property(e => e.LastName).HasMaxLength(50);
                 entity.Property(e => e.PhoneNumber).HasMaxLength(20);

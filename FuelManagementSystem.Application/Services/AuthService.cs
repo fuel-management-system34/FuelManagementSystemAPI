@@ -84,8 +84,11 @@ namespace FuelManagementSystem.Application.Services
                     IPAddress = "0.0.0.0" // This would normally come from the request
                 });
 
+                //get user roles
+                var currentRoles = await _userRoleRepository.GetByUserIdAsync(user.UserId);
+
                 // Generate tokens
-                var token = GenerateJwtToken(user);
+                var token = GenerateJwtToken(user, currentRoles);
                 var refreshToken = GenerateRefreshToken();
 
                 // In a real application, store the refresh token securely in the database
@@ -131,8 +134,10 @@ namespace FuelManagementSystem.Application.Services
                     IPAddress = "0.0.0.0" // This would normally come from the request
                 });
 
+                var currentRoles = await _userRoleRepository.GetByUserIdAsync(user.UserId);
+
                 // Generate tokens
-                var token = GenerateJwtToken(user);
+                var token = GenerateJwtToken(user, currentRoles);
                 var refreshToken = GenerateRefreshToken();
 
                 // In a real application, store the refresh token securely in the database
@@ -162,7 +167,6 @@ namespace FuelManagementSystem.Application.Services
                 {
                     Username = username,
                     Email = email,
-                    PasswordHash = HashPassword(password),
                     FirstName = firstName,
                     LastName = lastName,
                     IsActive = true,
@@ -240,9 +244,10 @@ namespace FuelManagementSystem.Application.Services
 
                 // Generate a new token (you would get the user from the refresh token)
                 // This is simplified - in reality you need to get the user from the stored refresh token
-                var user = _userRepository.GetAllAsync().Result.First();
+                var user =  _userRepository.GetAllAsync().Result.First();
+                var currentRoles = _userRoleRepository.GetByUserIdAsync(user.UserId);
 
-                var newToken = GenerateJwtToken(user);
+                var newToken = GenerateJwtToken(user, currentRoles);
                 var newRefreshToken = GenerateRefreshToken();
 
                 return Task.FromResult((true, newToken, newRefreshToken));
@@ -285,7 +290,7 @@ namespace FuelManagementSystem.Application.Services
         }
 
         // Helper methods
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user, dynamic userRoles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
@@ -299,8 +304,9 @@ namespace FuelManagementSystem.Application.Services
                 new Claim("LastName", user.LastName ?? string.Empty)
             };
 
+
             // Add roles to claims
-            foreach (var userRole in user.UserRoles)
+            foreach (var userRole in userRoles)
             {
                 var role = _roleRepository.GetByIdAsync(userRole.RoleId).Result;
                 if (role != null)
