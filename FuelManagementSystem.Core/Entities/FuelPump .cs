@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace FuelManagementSystem.Core.Entities
 {
     public class FuelPump : BaseEntity
     {
+        [Key]
         public int PumpId { get; set; }
         public int StationId { get; set; }
         public int TankId { get; set; }
